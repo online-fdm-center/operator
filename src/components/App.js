@@ -6,7 +6,7 @@ import "../styles/App.css"
 
 import AuthPage from "./AuthPage"
 import NavBar from './NavBar'
-import UsersTable from './UsersTable'
+import MaterialsTable from './MaterialsTable'
 
 const mapStateToProps = ({auth}) => ({
   isAuth: auth.token && auth.token.user.group !== 'TEMPORARY_USER',
@@ -34,7 +34,7 @@ class Panel extends Component {
     return (
       <>
         <NavBar />
-        <Route path="/panel/users" component={UsersTable} />
+        <Route path="/panel/materials" component={MaterialsTable} />
       </>
     )
   }
@@ -45,7 +45,7 @@ class App extends Component {
     return (
       <>
         <Switch>
-          <Redirect exact from="/" to="/panel/users" />
+          <Redirect exact from="/" to="/panel/materials" />
           <PrivateRoute path="/panel" component={Panel}/>
         </Switch>
         <Route path="/auth" component={AuthPage} />

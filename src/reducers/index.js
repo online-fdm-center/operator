@@ -1,8 +1,8 @@
 import { combineReducers } from "redux"
 import auth from './auth'
-import usersTable from './usersTable'
+import materials from './materials'
 
 export default combineReducers({
   auth,
-  usersTable
+  materials
 })

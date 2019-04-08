@@ -114,6 +114,70 @@ class Api {
     })
       .then(this.defaultResponseHandler)
   }
+
+  /**
+   * Получение списка пользователей с сервера
+   * @param {string} token токен авторизации
+   * @param {object} filter фильтр
+   */
+  getMaterials = (token, filter) => {
+    return fetch(`//${Api.apiUrl}/materials?${qs.stringify({filter})}`, {
+      headers: {
+        'x-auth-token': token
+      }
+    })
+      .then(this.defaultResponseHandler)
+  }
+
+  /**
+   * Создание пользователя
+   * @param {string} token токен авторизации
+   * @param {object} user пользователь
+   */
+  createMaterial = (token, user) => {
+    return fetch(`//${Api.apiUrl}/materials`, {
+      headers: {
+        'x-auth-token': token,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(user),
+      method: 'POST'
+    })
+      .then(this.defaultResponseHandler)
+  }
+
+  /**
+   * Изменение пользователя
+   * @param {string} token токен авторизации
+   * @param {object} user id пользователя
+   */
+  updateMaterial = (token, user) => {
+    return fetch(`//${Api.apiUrl}/materials/${user.id}`, {
+      headers: {
+        'x-auth-token': token,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(user),
+      method: 'PATCH'
+    })
+      .then(this.defaultResponseHandler)
+  }
+
+  /**
+   * Удаление пользователя
+   * @param {string} token токен авторизации
+   * @param {number} id id пользователя
+   */
+  deleteMaterial = (token, id) => {
+    return fetch(`//${Api.apiUrl}/materials/${id}`, {
+      headers: {
+        'x-auth-token': token,
+        'Content-Type': 'application/json'
+      },
+      method: 'DELETE'
+    })
+      .then(this.defaultResponseHandler)
+  }
   
 }
 
