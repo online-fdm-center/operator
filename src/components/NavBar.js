@@ -22,6 +22,9 @@ class NavBar extends Component {
           <LinkContainer to="/panel/materials">
             <Nav.Link>Материалы</Nav.Link>
           </LinkContainer>
+          <LinkContainer to="/panel/qualities">
+            <Nav.Link>Качества печати</Nav.Link>
+          </LinkContainer>
         </Nav>
         <Button variant="outline-secondary" onClick={this.props.unlogin}>Выйти</Button>
       </Navbar>

@@ -7,6 +7,7 @@ import "../styles/App.css"
 import AuthPage from "./AuthPage"
 import NavBar from './NavBar'
 import MaterialsTable from './MaterialsTable'
+import QualitiesTable from './QualitiesTable'
 
 const mapStateToProps = ({auth}) => ({
   isAuth: auth.token && auth.token.user.group !== 'TEMPORARY_USER',
@@ -35,6 +36,7 @@ class Panel extends Component {
       <>
         <NavBar />
         <Route path="/panel/materials" component={MaterialsTable} />
+        <Route path="/panel/qualities" component={QualitiesTable} />
       </>
     )
   }

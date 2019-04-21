@@ -444,6 +444,266 @@
         "operationId": "PingController.ping"
       }
     },
+    "/print-qualities/{id}": {
+      "patch": {
+        "x-controller-name": "PrintQualityController",
+        "x-operation-name": "updateById",
+        "tags": [
+          "PrintQualityController"
+        ],
+        "description": "Изменить качество печати",
+        "responses": {
+          "204": {
+            "description": "PrintQuality PATCH success"
+          }
+        },
+        "security": [
+          {
+            "authToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PrintQuality"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "PrintQualityController.updateById"
+      },
+      "get": {
+        "x-controller-name": "PrintQualityController",
+        "x-operation-name": "findById",
+        "tags": [
+          "PrintQualityController"
+        ],
+        "description": "Получить качество печати по id",
+        "responses": {
+          "200": {
+            "description": "PrintQuality model instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PrintQuality"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "operationId": "PrintQualityController.findById"
+      },
+      "delete": {
+        "x-controller-name": "PrintQualityController",
+        "x-operation-name": "deleteById",
+        "tags": [
+          "PrintQualityController"
+        ],
+        "description": "Удалить качество печати",
+        "responses": {
+          "204": {
+            "description": "PrintQuality DELETE success"
+          }
+        },
+        "security": [
+          {
+            "authToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "operationId": "PrintQualityController.deleteById"
+      }
+    },
+    "/print-qualities": {
+      "post": {
+        "x-controller-name": "PrintQualityController",
+        "x-operation-name": "create",
+        "tags": [
+          "PrintQualityController"
+        ],
+        "description": "Создать качества печати",
+        "responses": {
+          "200": {
+            "description": "PrintQuality model instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PrintQuality"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authToken": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PrintQuality"
+              }
+            }
+          }
+        },
+        "operationId": "PrintQualityController.create"
+      },
+      "get": {
+        "x-controller-name": "PrintQualityController",
+        "x-operation-name": "find",
+        "tags": [
+          "PrintQualityController"
+        ],
+        "description": "Получить качества печати",
+        "responses": {
+          "200": {
+            "description": "Array of PrintQuality model instances",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PrintQuality"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "style": "deepObject",
+            "explode": true,
+            "schema": {
+              "properties": {
+                "where": {
+                  "type": "object"
+                },
+                "fields": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "boolean"
+                    },
+                    "name": {
+                      "type": "boolean"
+                    },
+                    "factor": {
+                      "type": "boolean"
+                    }
+                  }
+                },
+                "offset": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "skip": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "order": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "include": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "relation": {
+                        "type": "string"
+                      },
+                      "scope": {
+                        "properties": {
+                          "where": {
+                            "type": "object"
+                          },
+                          "fields": {
+                            "type": "object",
+                            "properties": {}
+                          },
+                          "offset": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "limit": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "skip": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "order": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "type": "object"
+            }
+          }
+        ],
+        "operationId": "PrintQualityController.find"
+      }
+    },
     "/products/duplicate/{id}": {
       "post": {
         "x-controller-name": "ProductController",
@@ -1218,6 +1478,27 @@
         "required": [
           "type",
           "price"
+        ]
+      },
+      "PrintQuality": {
+        "title": "PrintQuality",
+        "properties": {
+          "id": {
+            "type": "number",
+            "title": "ID"
+          },
+          "name": {
+            "type": "string",
+            "title": "Название"
+          },
+          "factor": {
+            "type": "number",
+            "title": "Множитель"
+          }
+        },
+        "required": [
+          "name",
+          "factor"
         ]
       },
       "Product": {

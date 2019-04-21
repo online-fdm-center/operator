@@ -178,6 +178,70 @@ class Api {
     })
       .then(this.defaultResponseHandler)
   }
+
+  /**
+   * Получение списка качеств с сервера
+   * @param {string} token токен авторизации
+   * @param {object} filter фильтр
+   */
+  getQualities = (token, filter) => {
+    return fetch(`//${Api.apiUrl}/print-qualities?${qs.stringify({filter})}`, {
+      headers: {
+        'x-auth-token': token
+      }
+    })
+      .then(this.defaultResponseHandler)
+  }
+
+  /**
+   * Создание качества
+   * @param {string} token токен авторизации
+   * @param {object} quality пользователь
+   */
+  createQuality = (token, quality) => {
+    return fetch(`//${Api.apiUrl}/print-qualities`, {
+      headers: {
+        'x-auth-token': token,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(quality),
+      method: 'POST'
+    })
+      .then(this.defaultResponseHandler)
+  }
+
+  /**
+   * Изменение качества
+   * @param {string} token токен авторизации
+   * @param {object} quality printQuality
+   */
+  updateQuality = (token, quality) => {
+    return fetch(`//${Api.apiUrl}/print-qualities/${quality.id}`, {
+      headers: {
+        'x-auth-token': token,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(quality),
+      method: 'PATCH'
+    })
+      .then(this.defaultResponseHandler)
+  }
+
+  /**
+   * Удаление качества
+   * @param {string} token токен авторизации
+   * @param {number} id id качества
+   */
+  deleteQuality = (token, id) => {
+    return fetch(`//${Api.apiUrl}/print-qualities/${id}`, {
+      headers: {
+        'x-auth-token': token,
+        'Content-Type': 'application/json'
+      },
+      method: 'DELETE'
+    })
+      .then(this.defaultResponseHandler)
+  }
   
 }
 
