@@ -47,7 +47,7 @@ export const deleteMaterial = (id) => {
   return (dispatch, getState) => {
     const { token } = getState().auth
     dispatch({type: DELETE_MATERIAL})
-    api.deleteMaterial(token, id)
+    api.deleteMaterial(token.token, id)
       .then(() => {
         dispatch({type: DELETE_USER_SUCCESS})
         dispatch(getMaterials())
@@ -67,7 +67,7 @@ export const updateMaterial = (material) => {
   return (dispatch, getState) => {
     const { token } = getState().auth
     dispatch({type: UPDATE_MATERIAL})
-    api.updateMaterial(token, material)
+    api.updateMaterial(token.token, material)
       .then(() => {
         dispatch({type: UPDATE_MATERIAL_SUCCESS})
         dispatch(getMaterials())

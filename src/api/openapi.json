@@ -1,7 +1,8 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "LoopBack Application",
+    "title": "online.fdm.center api server",
+    "description": "Описание API для работы с сервисом онлайн заказа 3d печати",
     "version": "1.0.0"
   },
   "paths": {
@@ -36,6 +37,47 @@
         "operationId": "AuthController.auth"
       }
     },
+    "/files/{id}/setAmount": {
+      "post": {
+        "x-controller-name": "FileController",
+        "x-operation-name": "updateById",
+        "tags": [
+          "FileController"
+        ],
+        "description": "Устанавливает объем модели в 3d файле.",
+        "responses": {
+          "204": {
+            "description": "Объем модели сохранен"
+          }
+        },
+        "security": [
+          {
+            "authToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "FileController.updateById"
+      }
+    },
     "/files": {
       "post": {
         "x-controller-name": "FileController",
@@ -43,6 +85,7 @@
         "tags": [
           "FileController"
         ],
+        "description": "Загрузить файл на сервер",
         "responses": {
           "200": {
             "description": "File model instance",
@@ -77,6 +120,7 @@
         "tags": [
           "FileController"
         ],
+        "description": "Получить файл для обработки слайсером. После получения статус файла устанавливается в *PROCESSING*",
         "responses": {
           "200": {
             "description": "File model instance",
@@ -92,89 +136,24 @@
         "operationId": "FileController.getFileToProcess"
       }
     },
-    "/materials/count": {
-      "get": {
-        "x-controller-name": "MaterialsController",
-        "x-operation-name": "count",
-        "tags": [
-          "MaterialsController"
-        ],
-        "responses": {
-          "200": {
-            "description": "Materials model count",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "count": {
-                      "type": "number"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "where",
-            "in": "query",
-            "style": "deepObject",
-            "explode": true,
-            "schema": {
-              "type": "object"
-            }
-          }
-        ],
-        "operationId": "MaterialsController.count"
-      }
-    },
     "/materials/{id}": {
-      "put": {
-        "x-controller-name": "MaterialsController",
-        "x-operation-name": "replaceById",
-        "tags": [
-          "MaterialsController"
-        ],
-        "responses": {
-          "204": {
-            "description": "Materials PUT success"
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "schema": {
-              "type": "number"
-            },
-            "required": true
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Materials"
-              }
-            }
-          },
-          "x-parameter-index": 1
-        },
-        "operationId": "MaterialsController.replaceById"
-      },
       "patch": {
         "x-controller-name": "MaterialsController",
         "x-operation-name": "updateById",
         "tags": [
           "MaterialsController"
         ],
+        "description": "Обновить материал по его id",
         "responses": {
           "204": {
             "description": "Materials PATCH success"
           }
         },
+        "security": [
+          {
+            "authToken": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -203,6 +182,7 @@
         "tags": [
           "MaterialsController"
         ],
+        "description": "Получить материал по его id",
         "responses": {
           "200": {
             "description": "Materials model instance",
@@ -215,6 +195,11 @@
             }
           }
         },
+        "security": [
+          {
+            "authToken": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -233,11 +218,17 @@
         "tags": [
           "MaterialsController"
         ],
+        "description": "Удалить материал",
         "responses": {
           "204": {
             "description": "Materials DELETE success"
           }
         },
+        "security": [
+          {
+            "authToken": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -258,6 +249,7 @@
         "tags": [
           "MaterialsController"
         ],
+        "description": "Создать материал",
         "responses": {
           "200": {
             "description": "Materials model instance",
@@ -270,6 +262,11 @@
             }
           }
         },
+        "security": [
+          {
+            "authToken": []
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -281,60 +278,16 @@
         },
         "operationId": "MaterialsController.create"
       },
-      "patch": {
-        "x-controller-name": "MaterialsController",
-        "x-operation-name": "updateAll",
-        "tags": [
-          "MaterialsController"
-        ],
-        "responses": {
-          "200": {
-            "description": "Materials PATCH success count",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "count": {
-                      "type": "number"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "where",
-            "in": "query",
-            "style": "deepObject",
-            "explode": true,
-            "schema": {
-              "type": "object"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Materials"
-              }
-            }
-          }
-        },
-        "operationId": "MaterialsController.updateAll"
-      },
       "get": {
         "x-controller-name": "MaterialsController",
         "x-operation-name": "find",
         "tags": [
           "MaterialsController"
         ],
+        "description": "Получить массив материалов",
         "responses": {
           "200": {
-            "description": "Array of Materials model instances",
+            "description": "Массив материалов",
             "content": {
               "application/json": {
                 "schema": {
@@ -347,6 +300,11 @@
             }
           }
         },
+        "security": [
+          {
+            "authToken": []
+          }
+        ],
         "parameters": [
           {
             "name": "filter",
@@ -371,6 +329,9 @@
                       "type": "boolean"
                     },
                     "count": {
+                      "type": "boolean"
+                    },
+                    "price": {
                       "type": "boolean"
                     }
                   }
@@ -483,44 +444,6 @@
         "operationId": "PingController.ping"
       }
     },
-    "/products/count": {
-      "get": {
-        "x-controller-name": "ProductController",
-        "x-operation-name": "count",
-        "tags": [
-          "ProductController"
-        ],
-        "responses": {
-          "200": {
-            "description": "Product model count",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "count": {
-                      "type": "number"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "where",
-            "in": "query",
-            "style": "deepObject",
-            "explode": true,
-            "schema": {
-              "type": "object"
-            }
-          }
-        ],
-        "operationId": "ProductController.count"
-      }
-    },
     "/products/duplicate/{id}": {
       "post": {
         "x-controller-name": "ProductController",
@@ -528,6 +451,7 @@
         "tags": [
           "ProductController"
         ],
+        "description": "Скопировать изделие",
         "responses": {
           "200": {
             "description": "Duplicate product model instance",
@@ -553,6 +477,39 @@
         "operationId": "ProductController.duplicateProductById"
       }
     },
+    "/products/{id}/getPreliminaryPrice": {
+      "get": {
+        "x-controller-name": "ProductController",
+        "x-operation-name": "getPreliminaryPrice",
+        "tags": [
+          "ProductController"
+        ],
+        "description": "Посчитать примерную цену изделия",
+        "responses": {
+          "200": {
+            "description": "Предварительная цена изделия",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PreliminaryPrice"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "operationId": "ProductController.getPreliminaryPrice"
+      }
+    },
     "/products/{id}": {
       "patch": {
         "x-controller-name": "ProductController",
@@ -560,6 +517,7 @@
         "tags": [
           "ProductController"
         ],
+        "description": "Обновить изделие по id",
         "responses": {
           "204": {
             "description": "Product PATCH success"
@@ -593,6 +551,7 @@
         "tags": [
           "ProductController"
         ],
+        "description": "Получить изделие по его id",
         "responses": {
           "200": {
             "description": "Product model instance",
@@ -623,6 +582,7 @@
         "tags": [
           "ProductController"
         ],
+        "description": "Удалить изделие",
         "responses": {
           "204": {
             "description": "Product DELETE success"
@@ -678,6 +638,7 @@
         "tags": [
           "ProductController"
         ],
+        "description": "Получить массив изделий",
         "responses": {
           "200": {
             "description": "Array of Product model instances",
@@ -725,10 +686,16 @@
                     "materialId": {
                       "type": "boolean"
                     },
+                    "qualityId": {
+                      "type": "boolean"
+                    },
                     "count": {
                       "type": "boolean"
                     },
                     "status": {
+                      "type": "boolean"
+                    },
+                    "price": {
                       "type": "boolean"
                     }
                   }
@@ -852,44 +819,6 @@
         "operationId": "AuthController.temporaryRegister"
       }
     },
-    "/users/count": {
-      "get": {
-        "x-controller-name": "UserController",
-        "x-operation-name": "count",
-        "tags": [
-          "UserController"
-        ],
-        "responses": {
-          "200": {
-            "description": "User model count",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "count": {
-                      "type": "number"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "where",
-            "in": "query",
-            "style": "deepObject",
-            "explode": true,
-            "schema": {
-              "type": "object"
-            }
-          }
-        ],
-        "operationId": "UserController.count"
-      }
-    },
     "/users/{id}": {
       "patch": {
         "x-controller-name": "UserController",
@@ -897,6 +826,7 @@
         "tags": [
           "UserController"
         ],
+        "description": "Обновить пользователя по id",
         "responses": {
           "204": {
             "description": "User PATCH success"
@@ -930,9 +860,10 @@
         "tags": [
           "UserController"
         ],
+        "description": "Получить пользователя по id",
         "responses": {
           "200": {
-            "description": "User model instance",
+            "description": "Экземпляр пользователя",
             "content": {
               "application/json": {
                 "schema": {
@@ -960,6 +891,7 @@
         "tags": [
           "UserController"
         ],
+        "description": "Удалить пользователя",
         "responses": {
           "204": {
             "description": "User DELETE success"
@@ -985,9 +917,10 @@
         "tags": [
           "UserController"
         ],
+        "description": "Создать пользователя",
         "responses": {
           "200": {
-            "description": "Создать пользователя",
+            "description": "Пользователь создан",
             "content": {
               "application/json": {
                 "schema": {
@@ -1014,9 +947,10 @@
         "tags": [
           "UserController"
         ],
+        "description": "Получить массив пользователей",
         "responses": {
           "200": {
-            "description": "Array of User model instances",
+            "description": "Массив пользователей",
             "content": {
               "application/json": {
                 "schema": {
@@ -1133,12 +1067,20 @@
       }
     }
   },
-  "servers": [
+  "tags": [
     {
-      "url": "http://api.online.fdm.center:3000"
+      "name": "AuthController",
+      "description": "Контроллер авторизации"
     }
   ],
   "components": {
+    "securitySchemes": {
+      "authToken": {
+        "type": "apiKey",
+        "name": "x-auth-token",
+        "in": "header"
+      }
+    },
     "schemas": {
       "AuthToken": {
         "title": "AuthToken",
@@ -1183,13 +1125,13 @@
       "UserForRegister": {
         "title": "UserForRegister",
         "properties": {
-          "name": {
-            "type": "string"
-          },
           "mail": {
             "type": "string"
           },
           "password": {
+            "type": "string"
+          },
+          "name": {
             "type": "string"
           },
           "address": {
@@ -1253,33 +1195,45 @@
         "title": "Materials",
         "properties": {
           "id": {
-            "type": "number"
+            "type": "number",
+            "title": "ID"
           },
           "type": {
-            "type": "string"
+            "type": "string",
+            "title": "Тип"
           },
           "color": {
-            "type": "string"
+            "type": "string",
+            "title": "Цвет"
           },
           "count": {
-            "type": "number"
+            "type": "number",
+            "title": "Количество"
+          },
+          "price": {
+            "type": "number",
+            "title": "Цена"
           }
         },
         "required": [
-          "type"
+          "type",
+          "price"
         ]
       },
       "Product": {
         "title": "Product",
         "properties": {
           "id": {
-            "type": "number"
+            "type": "number",
+            "title": "ID"
           },
           "name": {
-            "type": "string"
+            "type": "string",
+            "title": "Название"
           },
           "description": {
-            "type": "string"
+            "type": "string",
+            "title": "Описание"
           },
           "userId": {
             "type": "number"
@@ -1290,11 +1244,20 @@
           "materialId": {
             "type": "number"
           },
-          "count": {
+          "qualityId": {
             "type": "number"
           },
+          "count": {
+            "type": "number",
+            "title": "Количество"
+          },
           "status": {
-            "type": "string"
+            "type": "string",
+            "title": "Статус"
+          },
+          "price": {
+            "type": "number",
+            "title": "Цена"
           }
         },
         "required": [
@@ -1302,16 +1265,24 @@
           "count"
         ]
       },
+      "PreliminaryPrice": {
+        "title": "PreliminaryPrice",
+        "properties": {
+          "preliminaryPrice": {
+            "type": "number"
+          }
+        }
+      },
       "UserForRegisterByAdmin": {
         "title": "UserForRegister",
         "properties": {
-          "name": {
-            "type": "string"
-          },
           "mail": {
             "type": "string"
           },
           "password": {
+            "type": "string"
+          },
+          "name": {
             "type": "string"
           },
           "address": {
@@ -1324,5 +1295,10 @@
         ]
       }
     }
-  }
+  },
+  "servers": [
+    {
+      "url": "http://api.online.fdm.center"
+    }
+  ]
 }
