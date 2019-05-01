@@ -6,10 +6,10 @@ export const GET_MATERIALS_SUCCESSFUL = 'GET_MATERIALS_SUCCESSFUL'
 
 export const getMaterials = (filter) => {
   return (dispatch, getState) => {
-    const { token } = getState().auth
+    const authState = getState().auth
     if (!filter) filter = getState().materials.filter
     dispatch({type: GET_MATERIALS, filter})
-    api.getMaterials(token.token, filter)
+    api.getMaterials(authState.token, filter)
       .then(materials => {
         dispatch({type: GET_MATERIALS_SUCCESSFUL, materials})
       })
@@ -25,9 +25,9 @@ export const CREATE_MATERIAL_SUCCESS = 'CREATE_MATERIAL_SUCCESS'
 
 export const createMaterial = (material) => {
   return (dispatch, getState) => {
-    const { token } = getState().auth
+    const authState = getState().auth
     dispatch({type: CREATE_MATERIAL})
-    api.createMaterial(token.token, material)
+    api.createMaterial(authState.token, material)
       .then(material => {
         dispatch({type: CREATE_MATERIAL_SUCCESS, material})
         dispatch(getMaterials())
@@ -45,9 +45,9 @@ export const DELETE_USER_SUCCESS = 'DELETE_USER_SUCCESS'
 
 export const deleteMaterial = (id) => {
   return (dispatch, getState) => {
-    const { token } = getState().auth
+    const authState = getState().auth
     dispatch({type: DELETE_MATERIAL})
-    api.deleteMaterial(token.token, id)
+    api.deleteMaterial(authState.token, id)
       .then(() => {
         dispatch({type: DELETE_USER_SUCCESS})
         dispatch(getMaterials())
@@ -65,9 +65,9 @@ export const UPDATE_MATERIAL_SUCCESS = 'UPDATE_MATERIAL_SUCCESS'
 
 export const updateMaterial = (material) => {
   return (dispatch, getState) => {
-    const { token } = getState().auth
+    const authState = getState().auth
     dispatch({type: UPDATE_MATERIAL})
-    api.updateMaterial(token.token, material)
+    api.updateMaterial(authState.token, material)
       .then(() => {
         dispatch({type: UPDATE_MATERIAL_SUCCESS})
         dispatch(getMaterials())

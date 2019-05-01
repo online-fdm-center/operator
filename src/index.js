@@ -11,7 +11,7 @@ import { BrowserRouter } from "react-router-dom"
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-import { tempAuth } from './actions/auth'
+import { initAuth } from './actions/auth'
 
 const store = createStore(
   rootReducer,
@@ -23,7 +23,7 @@ const store = createStore(
     : applyMiddleware(thunk)
 )
 
-store.dispatch(tempAuth())
+store.dispatch(initAuth())
 
 ReactDOM.render(
   <Provider store = {store}>

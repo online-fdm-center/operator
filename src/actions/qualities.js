@@ -6,10 +6,10 @@ export const GET_QUALITIES_SUCCESSFUL = 'GET_QUALITIES_SUCCESSFUL'
 
 export const getQualities = (filter) => {
   return (dispatch, getState) => {
-    const { token } = getState().auth
+    const authState = getState().auth
     if (!filter) filter = getState().qualities.filter
     dispatch({type: GET_QUALITIES, filter})
-    api.getQualities(token.token, filter)
+    api.getQualities(authState.token, filter)
       .then(qualities => {
         dispatch({type: GET_QUALITIES_SUCCESSFUL, qualities})
       })
@@ -25,9 +25,9 @@ export const CREATE_QUALITY_SUCCESS = 'CREATE_QUALITY_SUCCESS'
 
 export const createQuality = (quality) => {
   return (dispatch, getState) => {
-    const { token } = getState().auth
+    const authState = getState().auth
     dispatch({type: CREATE_QUALITY})
-    api.createQuality(token.token, quality)
+    api.createQuality(authState.token, quality)
       .then(quality => {
         dispatch({type: CREATE_QUALITY_SUCCESS, quality})
         dispatch(getQualities())
@@ -45,9 +45,9 @@ export const DELETE_QUALITY_SUCCESS = 'DELETE_QUALITY_SUCCESS'
 
 export const deleteQuality = (id) => {
   return (dispatch, getState) => {
-    const { token } = getState().auth
+    const authState = getState().auth
     dispatch({type: DELETE_QUALITY})
-    api.deleteQuality(token.token, id)
+    api.deleteQuality(authState.token, id)
       .then(() => {
         dispatch({type: DELETE_QUALITY_SUCCESS})
         dispatch(getQualities())
@@ -65,9 +65,9 @@ export const UPDATE_QUALITY_SUCCESS = 'UPDATE_QUALITY_SUCCESS'
 
 export const updateQuality = (quality) => {
   return (dispatch, getState) => {
-    const { token } = getState().auth
+    const authState = getState().auth
     dispatch({type: UPDATE_QUALITY})
-    api.updateQuality(token.token, quality)
+    api.updateQuality(authState.token, quality)
       .then(() => {
         dispatch({type: UPDATE_QUALITY_SUCCESS})
         dispatch(getQualities())

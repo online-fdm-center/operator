@@ -10,7 +10,7 @@ import MaterialsTable from './MaterialsTable'
 import QualitiesTable from './QualitiesTable'
 
 const mapStateToProps = ({auth}) => ({
-  isAuth: auth.token && auth.token.user.group !== 'TEMPORARY_USER',
+  isAuth: auth.token && auth.group && auth.group !== 'TEMPORARY_USER' && auth.group !== 'UNAUTHORIZED',
 })
 
 class PrivateRouteUnconnected extends Component {

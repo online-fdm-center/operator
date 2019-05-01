@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Form, Button } from 'react-bootstrap'
-import { login, TEST_LOGIN_FAILED } from '../actions/auth'
+import { login } from '../actions/auth'
 
 const mapStateToProps = ({auth}) => ({
   token: auth.token,
-  isAuth: auth.token && auth.token.user.group !== 'TEMPORARY_USER',
+  isAuth: auth.token && auth.group && auth.group !== 'TEMPORARY_USER' && auth.group !== 'UNAUTHORIZED',
   status: auth.status
 })
 const mapDispatchToProps = dispatch => ({
@@ -59,7 +59,7 @@ class AuthPage extends Component {
               type="password"
               placeholder="1q2w3e"
               required
-              isInvalid={this.props.status === TEST_LOGIN_FAILED}
+              isInvalid={this.props.status === 'AUTH_FAILED'}
             />
             <Form.Control.Feedback type="invalid">Неверный пароль</Form.Control.Feedback>
           </Form.Group>

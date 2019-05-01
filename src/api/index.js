@@ -243,6 +243,15 @@ class Api {
       .then(this.defaultResponseHandler)
   }
   
+  getProducts = (token, filter) => {
+    return fetch(`//${Api.apiUrl}/products?${qs.stringify({filter})}`, {
+      headers: {
+        'x-auth-token': token
+      },
+    })
+      .then(this.defaultResponseHandler)
+  }
+
 }
 
 export default new Api()

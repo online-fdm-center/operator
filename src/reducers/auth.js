@@ -1,29 +1,26 @@
 import {
-  TEST_LOGIN,
-  TEST_LOGIN_FAILED,
-  TEST_LOGIN_SUCCESS,
-  TEMP_AUTH,
-  TEMP_AUTH_FAILED,
-  TEMP_AUTH_SUCCESS,
+  AUTH,
+  AUTH_FAILED,
+  AUTH_SUCCESS,
   UNLOGIN
 } from '../actions/auth'
 
 const initialState = {
-  token: JSON.parse(localStorage.getItem('token')),
+  group: 'UNAUTHORIZED',
   status: null
 }
 
 function authReducer(state = initialState, action) {
   switch (action.type) {
-  case TEST_LOGIN:
-    return {...state, status: TEST_LOGIN}
-  case TEST_LOGIN_FAILED:
-    return {...state, status: TEST_LOGIN_FAILED}
-  case TEST_LOGIN_SUCCESS:
-  case TEMP_AUTH_SUCCESS:
-    return {...state, status: null, token: action.token}
+  case AUTH_SUCCESS:
+    return {...state, ...action.token, status: null}
+  case AUTH_FAILED:
+    return {
+      ...state,
+      status: AUTH_FAILED
+    }
   case UNLOGIN:
-    return {...state, status: null}
+    return initialState
   default:
     return state
   }

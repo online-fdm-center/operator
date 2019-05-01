@@ -1,52 +1,18 @@
 import api from '../api'
 
-export const TEST_LOGIN = 'TEST_LOGIN'
-export const TEST_LOGIN_FAILED = 'TEST_LOGIN_FAILED'
-export const TEST_LOGIN_SUCCESS = 'TEST_LOGIN_SUCCESS'
+export const AUTH = 'AUTH'
+export const AUTH_FAILED = 'AUTH_FAILED'
+export const AUTH_SUCCESS = 'AUTH_SUCCESS'
 
-export const login = (mailPass) => {
-  return (dispatch, getState) => {
-    const authState = getState().auth
-    dispatch({type: TEST_LOGIN})
-    let token
-    api.auth(authState.token.token, mailPass)
-      .then(answer => {
-        token = answer
-        return api.getUser(answer.token, answer.userId)
-      })
-      .then(user => {
-        token = {
-          ...token,
-          user
-        }
-        console.log(token)
-        localStorage.setItem('token', JSON.stringify(token))
-        dispatch({type: TEST_LOGIN_SUCCESS, token})
-      })
-      .catch(error => dispatch({type: TEST_LOGIN_FAILED, error}))
-  }
-}
-
-export const UNLOGIN = 'UNLOGIN'
-
-export const unlogin = () => {
+export const authSuccess = (token) => {
   return (dispatch) => {
-    localStorage.removeItem('token')
-    dispatch(tempAuth(true))    
+    dispatch({type: AUTH_SUCCESS, token})
   }
 }
 
-export const TEMP_AUTH = 'TEMP_AUTH'
-export const TEMP_AUTH_FAILED = 'TEMP_AUTH_FAILED'
-export const TEMP_AUTH_SUCCESS = 'TEMP_AUTH_SUCCESS'
-
-export const tempAuth = (force = false) => {
-  return (dispatch, getState) => {
-    const authState = getState().auth
-    if (!force && authState.token){
-      return
-    }
-    dispatch({type: TEMP_AUTH})
+export const tempAuth = () => {
+  return (dispatch) => {
+    dispatch({type: AUTH})
     let token
     api.temporaryRegister()
       .then(answer => {
@@ -56,15 +22,112 @@ export const tempAuth = (force = false) => {
       .then(user => {
         token = {
           ...token,
-          user
+          ...user
         }
         console.log(token)
-        localStorage.setItem('token', JSON.stringify(token))
-        dispatch({type: TEMP_AUTH_SUCCESS, token})
+        localStorage.setItem('ofcOperatorToken', JSON.stringify(token))
+        dispatch(authSuccess(token))
       })
       .catch(error => {
         console.error(error)
-        dispatch({type: TEMP_AUTH_FAILED, error})
+        dispatch({type: AUTH_FAILED, error})
+      })
+  }
+}
+
+export const login = (mailPass) => {
+  return (dispatch, getState) => {
+    dispatch({type: AUTH})
+    const authState = getState().auth
+    let token
+    api.auth(authState.token, mailPass)
+      .then(answer => {
+        token = answer
+        return api.getUser(answer.token, answer.userId)
+      })
+      .then(user => {
+        token = {
+          ...token, 
+          ...user
+        }
+        console.log(token)
+        localStorage.setItem('ofcOperatorToken', JSON.stringify(token))
+        dispatch(authSuccess(token))
+      })
+      .catch(error => {
+        console.error(error)
+        dispatch({type: AUTH_FAILED, error})
+      })
+  }
+}
+
+export const UNLOGIN = 'UNLOGIN'
+
+export const unlogin = () => {
+  return (dispatch) => {
+    localStorage.removeItem('ofcOperatorToken')
+    dispatch({type: UNLOGIN})
+    dispatch(tempAuth())
+  }
+}
+
+export const initAuth = () => {
+  return (dispatch) => {
+    const localStorageTokenStringified = localStorage.getItem('ofcOperatorToken')
+    if (!localStorageTokenStringified){
+      dispatch(tempAuth())
+      return
+    }
+    try{
+      const localStorageToken = JSON.parse(localStorageTokenStringified)
+      api.getUser(localStorageToken.token, localStorageToken.id)
+        .then(user => {
+          if (localStorageToken.group === user.group){
+            dispatch(authSuccess(localStorageToken))
+          } else {
+            console.warn('localstorage token не валиден', localStorageToken, user)
+            dispatch(unlogin())
+          }
+        })
+        .catch(error => {
+          console.error(error)
+          dispatch(unlogin())
+        })
+    } catch (e) {
+      console.error(e)
+      dispatch(unlogin())
+      return
+    }
+    
+  }
+}
+
+export const REGISTER = 'REGISTER'
+export const REGISTER_FAILED = 'REGISTER_FAILED'
+export const REGISTER_SUCCESS = 'REGISTER_SUCCESS'
+
+export const register = (user, history) => {
+  return (dispatch, getState) => {
+    const authState = getState().auth
+    dispatch({type: REGISTER})
+    api.register(authState.token, user)
+      .then(user => {
+        dispatch({type: REGISTER_SUCCESS}, user)
+        history.push('/')
+        api.getUser(authState.token, authState.id)
+          .then(user => {
+            const token = {
+              ...authState, 
+              ...user
+            }
+            console.log(token)
+            localStorage.setItem('ofcOperatorToken', JSON.stringify(token))
+            dispatch(authSuccess(token))
+          })
+      })
+      .catch(error => {
+        console.error(error)
+        dispatch({type: REGISTER_FAILED, error})
       })
   }
 }
