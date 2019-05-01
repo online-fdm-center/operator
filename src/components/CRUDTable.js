@@ -76,7 +76,10 @@ class CRUDTable extends Component {
       <>
         <Container fluid={true}>
           <h2>Таблица {schema.title}</h2>
-          <Button size="sm" className="ml-2" onClick={() => this.setState({createItemModal: true})}>Создать {schema.title}</Button>
+          { typeof this.props.createItem === 'function'
+            ? <Button size="sm" className="ml-2" onClick={() => this.setState({createItemModal: true})}>Создать {schema.title}</Button>
+            : null
+          }
           <Table striped bordered hover size="sm" className="mt-2">
             <thead>
               <tr>
@@ -164,14 +167,27 @@ class CRUDTable extends Component {
                   Object.keys(schema.properties).filter(key => key !== 'id').map(key => (
                     <Form.Group key={key}>
                       <Form.Label>{schema.properties[key].title || key}</Form.Label>
-                      <Form.Control
-                        name={key}
-                        type={OPENAPI_HTML_TYPES_MAP[schema.properties[key].type] || schema.properties[key].type}
-                        step={0.01}
-                        size="sm"
-                        defaultValue={editItem[key]}
-                        required={schema.required.includes(key)}
-                      ></Form.Control>
+                      { Array.isArray(schema.properties[key].enum)
+                        ? <Form.Control
+                          name={key}
+                          type={OPENAPI_HTML_TYPES_MAP[schema.properties[key].type] || schema.properties[key].type}
+                          step={0.01}
+                          size="sm"
+                          defaultValue={editItem[key]}
+                          required={schema.required.includes(key)}
+                          as="select"
+                        >
+                          { schema.properties[key].enum.map(item => (<option key={item}>{item}</option>))}
+                        </Form.Control>
+                        : <Form.Control
+                          name={key}
+                          type={OPENAPI_HTML_TYPES_MAP[schema.properties[key].type] || schema.properties[key].type}
+                          step={0.01}
+                          size="sm"
+                          defaultValue={editItem[key]}
+                          required={schema.required.includes(key)}
+                        />
+                      }
                     </Form.Group>
                   ))
                 }
