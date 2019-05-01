@@ -19,6 +19,9 @@ class NavBar extends Component {
       <Navbar>
         <Navbar.Brand>online.fdm.center</Navbar.Brand>
         <Nav className="mr-auto">
+          <LinkContainer to="/panel/products">
+            <Nav.Link>Заказы</Nav.Link>
+          </LinkContainer>
           <LinkContainer to="/panel/materials">
             <Nav.Link>Материалы</Nav.Link>
           </LinkContainer>

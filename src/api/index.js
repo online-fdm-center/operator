@@ -243,6 +243,15 @@ class Api {
       .then(this.defaultResponseHandler)
   }
   
+  getPreliminaryPrice = (token, productId) => {
+    return fetch(`//${Api.apiUrl}/products/${productId}/getPreliminaryPrice`, {
+      headers: {
+        'x-auth-token': token
+      }
+    })
+      .then(this.defaultResponseHandler)
+  }
+
   getProducts = (token, filter) => {
     return fetch(`//${Api.apiUrl}/products?${qs.stringify({filter})}`, {
       headers: {
@@ -252,6 +261,27 @@ class Api {
       .then(this.defaultResponseHandler)
   }
 
+  updateProduct = (token, product) => {
+    return fetch(`//${Api.apiUrl}/products/${product.id}`, {
+      headers: {
+        'x-auth-token': token,
+        'Content-Type': 'application/json'
+      },
+      method: 'PATCH',
+      body: JSON.stringify(product)
+    })
+      .then(this.defaultResponseHandler)
+  }
+
+  deleteProduct = (token, id) => {
+    return fetch(`//${Api.apiUrl}/products/${id}`, {
+      headers: {
+        'x-auth-token': token
+      },
+      method: 'DELETE',
+    })
+      .then(this.defaultResponseHandler)
+  }
 }
 
 export default new Api()

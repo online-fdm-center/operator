@@ -8,6 +8,7 @@ import AuthPage from "./AuthPage"
 import NavBar from './NavBar'
 import MaterialsTable from './MaterialsTable'
 import QualitiesTable from './QualitiesTable'
+import ProductsTable from './ProductsTable'
 
 const mapStateToProps = ({auth}) => ({
   isAuth: auth.token && auth.group && auth.group !== 'TEMPORARY_USER' && auth.group !== 'UNAUTHORIZED',
@@ -35,6 +36,7 @@ class Panel extends Component {
     return (
       <>
         <NavBar />
+        <Route path="/panel/products" component={ProductsTable} />
         <Route path="/panel/materials" component={MaterialsTable} />
         <Route path="/panel/qualities" component={QualitiesTable} />
       </>
@@ -47,7 +49,7 @@ class App extends Component {
     return (
       <>
         <Switch>
-          <Redirect exact from="/" to="/panel/materials" />
+          <Redirect exact from="/" to="/panel/products" />
           <PrivateRoute path="/panel" component={Panel}/>
         </Switch>
         <Route path="/auth" component={AuthPage} />

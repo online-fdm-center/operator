@@ -40,11 +40,11 @@
     "/files/{id}/setAmount": {
       "post": {
         "x-controller-name": "FileController",
-        "x-operation-name": "updateById",
+        "x-operation-name": "setAmount",
         "tags": [
           "FileController"
         ],
-        "description": "Устанавливает объем модели в 3d файле.",
+        "description": "Устанавливает объем модели в 3d файле, изменяет статус файла и изделий",
         "responses": {
           "204": {
             "description": "Объем модели сохранен"
@@ -75,7 +75,79 @@
           },
           "x-parameter-index": 1
         },
-        "operationId": "FileController.updateById"
+        "operationId": "FileController.setAmount"
+      }
+    },
+    "/files/{id}/setImage": {
+      "post": {
+        "x-controller-name": "FileController",
+        "x-operation-name": "setImage",
+        "tags": [
+          "FileController"
+        ],
+        "description": "Устанавливает изображение в 3d файле.",
+        "responses": {
+          "204": {
+            "description": "Объем модели сохранен"
+          }
+        },
+        "security": [
+          {
+            "authToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ThreeDFileImage"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "FileController.setImage"
+      }
+    },
+    "/files/{id}/setProcessFailed": {
+      "post": {
+        "x-controller-name": "FileController",
+        "x-operation-name": "setProcessFailed",
+        "tags": [
+          "FileController"
+        ],
+        "description": "Устанавливает статус ошибки обработки.",
+        "responses": {
+          "204": {
+            "description": "Объем модели сохранен"
+          }
+        },
+        "security": [
+          {
+            "authToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "operationId": "FileController.setProcessFailed"
       }
     },
     "/files": {
@@ -98,6 +170,11 @@
             }
           }
         },
+        "security": [
+          {
+            "authToken": []
+          }
+        ],
         "requestBody": {
           "description": "multipart/form-data value.",
           "required": true,
@@ -133,7 +210,40 @@
             }
           }
         },
+        "security": [
+          {
+            "authToken": []
+          }
+        ],
         "operationId": "FileController.getFileToProcess"
+      }
+    },
+    "/getFileToRender": {
+      "post": {
+        "x-controller-name": "FileController",
+        "x-operation-name": "getFileToRender",
+        "tags": [
+          "FileController"
+        ],
+        "description": "Получить файл для обработки рендером.",
+        "responses": {
+          "200": {
+            "description": "File model instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ThreeDFile"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authToken": []
+          }
+        ],
+        "operationId": "FileController.getFileToRender"
       }
     },
     "/materials/{id}": {
@@ -737,6 +847,44 @@
         "operationId": "ProductController.duplicateProductById"
       }
     },
+    "/products/{id}/getImage": {
+      "get": {
+        "x-controller-name": "ProductController",
+        "x-operation-name": "getImage",
+        "tags": [
+          "ProductController"
+        ],
+        "description": "Получить ссылку на рендер",
+        "responses": {
+          "200": {
+            "description": "Ссылка на рендер",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "image": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "operationId": "ProductController.getImage"
+      }
+    },
     "/products/{id}/getPreliminaryPrice": {
       "get": {
         "x-controller-name": "ProductController",
@@ -768,6 +916,42 @@
           }
         ],
         "operationId": "ProductController.getPreliminaryPrice"
+      }
+    },
+    "/products/{id}/setStatus": {
+      "post": {
+        "x-controller-name": "ProductController",
+        "x-operation-name": "setStatus",
+        "tags": [
+          "ProductController"
+        ],
+        "description": "Поменять статус изделия",
+        "responses": {
+          "204": {
+            "description": "Статус сменен"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductStatus"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "ProductController.setStatus"
       }
     },
     "/products/{id}": {
@@ -1444,12 +1628,23 @@
           },
           "amount": {
             "type": "number"
+          },
+          "image": {
+            "type": "string"
           }
         },
         "required": [
           "destination",
           "filename"
         ]
+      },
+      "ThreeDFileImage": {
+        "title": "ThreeDFileImage",
+        "properties": {
+          "image": {
+            "type": "string"
+          }
+        }
       },
       "Materials": {
         "title": "Materials",
@@ -1534,7 +1729,23 @@
           },
           "status": {
             "type": "string",
-            "title": "Статус"
+            "title": "Статус",
+            "enum": [
+              "WAITING_FOR_PROCESSING",
+              "PROCESSING",
+              "PROCESSING_ERROR",
+              "READY_FOR_PRINTING",
+              "OPERATORS_CHECK",
+              "UNPRINTABLE",
+              "WAITING_FOR_PAYMENT",
+              "PAID",
+              "REFUND_BY_USER",
+              "PRINTING",
+              "REFUND_BY_OPERATOR",
+              "TRANSFER",
+              "COMPLETED",
+              "DELETED"
+            ]
           },
           "price": {
             "type": "number",
@@ -1551,6 +1762,30 @@
         "properties": {
           "preliminaryPrice": {
             "type": "number"
+          }
+        }
+      },
+      "ProductStatus": {
+        "title": "ProductStatus",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "WAITING_FOR_PROCESSING",
+              "PROCESSING",
+              "PROCESSING_ERROR",
+              "READY_FOR_PRINTING",
+              "OPERATORS_CHECK",
+              "UNPRINTABLE",
+              "WAITING_FOR_PAYMENT",
+              "PAID",
+              "REFUND_BY_USER",
+              "PRINTING",
+              "REFUND_BY_OPERATOR",
+              "TRANSFER",
+              "COMPLETED",
+              "DELETED"
+            ]
           }
         }
       },
