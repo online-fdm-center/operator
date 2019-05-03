@@ -25,6 +25,28 @@ export const getPreliminaryPrice = (id) => {
   }
 }
 
+export const GET_FILES = 'GET_FILES'
+export const GET_FILES_SUCCESSFUL = 'GET_FILES_SUCCESSFUL'
+export const GET_FILES_FAILED = 'GET_FILES_FAILED'
+
+export const getProductFile = (id) => {
+  return (dispatch, getState) => {
+    const authState = getState().auth
+    dispatch({type: GET_FILES})
+    api.getFileProduct(authState.token, id)
+      .then(answer => {
+        dispatch({
+          type: GET_FILES_SUCCESSFUL,
+          files: [answer]
+        })     
+      })
+      .catch(error => {
+        console.error(error)
+        dispatch({type: GET_FILES_FAILED})
+      })
+  }
+}
+
 export const GET_PRODUCTS = 'GET_PRODUCTS'
 export const GET_PRODUCTS_SUCCESSFUL = 'GET_PRODUCTS_SUCCESSFUL'
 export const GET_PRODUCTS_FAILED = 'GET_PRODUCTS_FAILED'
@@ -38,6 +60,7 @@ export const getProduct = (id) => {
         console.log(product)
         dispatch({type: GET_PRODUCTS_SUCCESSFUL, products: [product]})
         dispatch(getPreliminaryPrice(product.id))
+        dispatch(getProductFile(product.id))
       })
       .catch(error => {
         console.error(error)
@@ -53,7 +76,10 @@ export const getProducts = (filter) => {
     api.getProducts(authState.token, filter)
       .then(products => {
         console.log(products)
-        products.forEach(product => dispatch(getPreliminaryPrice(product.id)))
+        products.forEach(product => {
+          dispatch(getPreliminaryPrice(product.id))
+          dispatch(getProductFile(product.id))
+        })
         dispatch({type: GET_PRODUCTS_SUCCESSFUL, products: products})
       })
       .catch(error => {

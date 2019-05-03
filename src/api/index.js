@@ -1,6 +1,6 @@
 import qs from 'qs'
 
-class Api {
+export class Api {
   // eslint-disable-next-line no-undef
   static apiUrl = API_URL
 
@@ -282,6 +282,14 @@ class Api {
     })
       .then(this.defaultResponseHandler)
   }
-}
 
+  getFileProduct = (token, id) => {
+    return fetch(`//${Api.apiUrl}/products/${id}/file`, {
+      headers: {
+        'x-auth-token': token
+      },
+    })
+      .then(this.defaultResponseHandler)
+  }
+}
 export default new Api()

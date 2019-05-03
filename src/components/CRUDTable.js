@@ -68,7 +68,7 @@ class CRUDTable extends Component {
   }
 
   render() {
-    const {items, schema} = this.props
+    const {items, schema, extraColumns = []} = this.props
     const editItem = this.state.updateModal !== null
       ? items.find(item => item.id === this.state.updateModal)
       : null
@@ -89,6 +89,11 @@ class CRUDTable extends Component {
                   ))
                 }
                 <th>Действие</th>
+                {
+                  extraColumns.map((extraColumn) => (
+                    <th key={extraColumn.header}>{extraColumn.header}</th>
+                  ))
+                }
               </tr>
             </thead>
             <tbody>
@@ -106,6 +111,11 @@ class CRUDTable extends Component {
                         <Dropdown.Item onClick={() => this.setState({deleteModal: item.id})}>Удалить</Dropdown.Item>
                       </DropdownButton>
                     </td>
+                    {
+                      extraColumns.map((extraColumn) => (
+                        <td key={extraColumn.header}>{extraColumn.func(item)}</td>
+                      ))
+                    }
                   </tr>
                 ))
               }
