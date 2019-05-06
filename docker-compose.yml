@@ -3,6 +3,6 @@ services:
 
   frontend:
     build: ./
-    image: ofc-operator
+    image: home.4it.me:5000/ofc-operator:latest
     ports:
       - 8083:80
