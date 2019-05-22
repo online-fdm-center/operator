@@ -10,7 +10,9 @@ const initialState = {
   preliminaryPrices: {},
   renders: {},
   myProducts: [],
-  filter: {}
+  filter: {
+    where: {}
+  }
 }
 
 function arrayToObjectById(array){
@@ -29,7 +31,7 @@ function productsReducer(state = initialState, action) {
     return {
       ...state,
       byId: {
-        ...state.byId,
+        //...state.byId,
         ...arrayToObjectById(action.products)
       }
     }

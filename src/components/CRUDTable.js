@@ -39,6 +39,26 @@ class CRUDTable extends Component {
     this.setState({createItemModal: false})
   }
 
+  onFilter = e => {
+    e.preventDefault()
+    const filterWhere = {}
+    this.props.controls.forEach(({column}) => {
+      let value = e.target[column].value
+      if (!value) return
+      switch (this.props.schema.properties[column].type) {
+      case 'number':
+        value = Number(value)
+        break
+      default:
+        break
+      }
+      filterWhere[column] = value
+    })
+    this.props.getItems({
+      where: filterWhere
+    })
+  }
+
   onUpdate = e => {
     e.preventDefault()
     const item = {}
@@ -76,6 +96,41 @@ class CRUDTable extends Component {
       <>
         <Container fluid={true}>
           <h2>Таблица {schema.title}</h2>
+          { Array.isArray(this.props.controls)
+            ? <Form onSubmit={this.onFilter} inline>
+              {
+                this.props.controls.map(({column, title}) => {
+                  return <Form.Group key={title}>
+                    <Form.Label>{schema.properties[column].title || column}</Form.Label>
+                    { Array.isArray(schema.properties[column].enum)
+                      ? <Form.Control
+                        className="ml-2"
+                        name={column}
+                        type={OPENAPI_HTML_TYPES_MAP[schema.properties[column].type] || schema.properties[column].type}
+                        step={0.01}
+                        size="sm"
+                        defaultValue={this.props.filter.where[column]}
+                        as="select"
+                      >
+                        <option key="default" value={''}>null</option>
+                        { schema.properties[column].enum.map(item => (<option key={item}>{item}</option>))}
+                      </Form.Control>
+                      : <Form.Control
+                        className="ml-2"
+                        name={column}
+                        type={OPENAPI_HTML_TYPES_MAP[schema.properties[column].type] || schema.properties[column].type}
+                        step={0.01}
+                        size="sm"
+                        defaultValue={this.props.filter.where[column]}
+                      />
+                    }
+                  </Form.Group>
+                })
+              }
+              <Button type="submit">Поиск</Button>
+            </Form>
+            : null            
+          }
           { typeof this.props.createItem === 'function'
             ? <Button size="sm" className="ml-2" onClick={() => this.setState({createItemModal: true})}>Создать {schema.title}</Button>
             : null

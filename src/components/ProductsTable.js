@@ -12,11 +12,16 @@ const mapStateToProps = ({products, files}) => ({
   items: Object.keys(products.byId).map(key => products.byId[key]),
   filter: products.filter,
   schema: productScheme,
+  controls: [
+    {
+      title: 'Статус',
+      column: 'status'
+    }
+  ],
   extraColumns: [
     {
       header: 'Скачать',
       func: product => {
-        console.log(Object.keys(files).length)
         const Href =  files.byId[product.fileId]
           ? <a href={`//${Api.apiUrl}/files/${files.byId[product.fileId].filename}/download`} download>скачать</a>
           : <a href="#">...</a>
